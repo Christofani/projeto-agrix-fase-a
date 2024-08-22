@@ -5,6 +5,8 @@ import com.betrybe.agrix.entity.Farm;
 import com.betrybe.agrix.repository.CropRepository;
 import com.betrybe.agrix.service.exception.CropNotFoundException;
 import com.betrybe.agrix.service.exception.FarmNotFoundException;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,15 @@ public class CropService {
   }
 
   /**
+   * Gets all crops.
+   *
+   * @return the all crops
+   */
+  public List<Crop> getAllCrops() {
+    return cropRepository.findAll();
+  }
+
+  /**
    * Find by id crop.
    *
    * @param id the id
@@ -39,6 +50,21 @@ public class CropService {
   public Crop findById(Long id) throws CropNotFoundException {
     return cropRepository.findById(id)
         .orElseThrow(CropNotFoundException::new);
+  }
+
+  /**
+   * Gets crops by farm id.
+   *
+   * @param farmId the farm id
+   * @return the crops by farm id
+   * @throws FarmNotFoundException the farm not found exception
+   */
+  public List<Crop> getCropsByFarmId(Long farmId) throws FarmNotFoundException {
+    Farm farm = farmService.findById(farmId);
+
+    return getAllCrops().stream()
+        .filter(crop -> crop.getFarm().equals(farm))
+        .collect(Collectors.toList());
   }
 
   /**

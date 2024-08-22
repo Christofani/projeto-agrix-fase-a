@@ -13,6 +13,7 @@ import com.betrybe.agrix.service.exception.FarmNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -103,5 +104,29 @@ public class FarmController {
     Crop savedCrop = cropService.createCropForFarm(farmId, crop);
 
     return CropDto.fromEntity(savedCrop);
+  }
+
+  /**
+   * Gets crops by farm id.
+   *
+   * @param farmId the farm id
+   * @return the crops by farm id
+   * @throws FarmNotFoundException the farm not found exception
+   */
+  @GetMapping("/{farmId}/crops")
+  public List<CropDto> getCropsByFarmId(@PathVariable Long farmId)
+      throws FarmNotFoundException {
+    try {
+      farmService.findById(farmId);
+    } catch (FarmNotFoundException e) {
+      // Lança a exceção se a fazenda não for encontrada
+      throw new FarmNotFoundException();
+    }
+
+    List<Crop> crops = cropService.getCropsByFarmId(farmId);
+
+    return crops.stream()
+        .map(CropDto::fromEntity)
+        .toList();
   }
 }

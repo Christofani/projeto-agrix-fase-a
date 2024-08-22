@@ -36,7 +36,7 @@ public class CropService {
    *
    * @return the all crops
    */
-  public List<Crop> getAllCrops() {
+  public List<Crop> findAll() {
     return cropRepository.findAll();
   }
 
@@ -62,7 +62,7 @@ public class CropService {
   public List<Crop> getCropsByFarmId(Long farmId) throws FarmNotFoundException {
     Farm farm = farmService.findById(farmId);
 
-    return getAllCrops().stream()
+    return findAll().stream()
         .filter(crop -> crop.getFarm().equals(farm))
         .collect(Collectors.toList());
   }

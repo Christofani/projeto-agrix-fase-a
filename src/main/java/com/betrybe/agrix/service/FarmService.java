@@ -18,7 +18,7 @@ public class FarmService {
   /**
    * Instantiates a new Farm service.
    *
-   * @param farmRepository the farm repository
+   * @param farmRepository the farmId repository
    */
   @Autowired
   public FarmService(FarmRepository farmRepository) {
@@ -26,10 +26,10 @@ public class FarmService {
   }
 
   /**
-   * Create farm.
+   * Create farmId.
    *
-   * @param farm the farm
-   * @return the farm
+   * @param farm the farmId
+   * @return the farmId
    */
   public Farm create(Farm farm) {
     return farmRepository.save(farm);
@@ -45,11 +45,11 @@ public class FarmService {
   }
 
   /**
-   * Find by id farm.
+   * Find by id farmId.
    *
    * @param id the id
-   * @return the farm
-   * @throws FarmNotFoundException the farm not found exception
+   * @return the farmId
+   * @throws FarmNotFoundException the farmId not found exception
    */
   public Farm findById(Long id) throws FarmNotFoundException {
     return farmRepository.findById(id)

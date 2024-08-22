@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 /**
@@ -19,6 +21,10 @@ public class Crop {
 
   private String name;
   private Double plantedArea;
+
+  @ManyToOne
+  @JoinColumn(name = "farm_id")
+  private Farm farmId;
 
   /**
    * Instantiates a new Crop.
@@ -89,5 +95,23 @@ public class Crop {
    */
   public void setPlantedArea(Double plantedArea) {
     this.plantedArea = plantedArea;
+  }
+
+  /**
+   * Gets farmId.
+   *
+   * @return the farmId
+   */
+  public Farm getFarm() {
+    return farmId;
+  }
+
+  /**
+   * Sets farmId.
+   *
+   * @param farmId the farmId
+   */
+  public void setFarm(Farm farmId) {
+    this.farmId = farmId;
   }
 }

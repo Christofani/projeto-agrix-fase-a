@@ -1,9 +1,14 @@
 package com.betrybe.agrix.controller;
 
+import com.betrybe.agrix.controller.dto.CropCreationDto;
+import com.betrybe.agrix.controller.dto.CropDto;
 import com.betrybe.agrix.controller.dto.FarmCreationDto;
 import com.betrybe.agrix.controller.dto.FarmDto;
+import com.betrybe.agrix.entity.Crop;
 import com.betrybe.agrix.entity.Farm;
+import com.betrybe.agrix.service.CropService;
 import com.betrybe.agrix.service.FarmService;
+import com.betrybe.agrix.service.exception.CropNotFoundException;
 import com.betrybe.agrix.service.exception.FarmNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,23 +30,26 @@ import org.springframework.web.bind.annotation.RestController;
 public class FarmController {
 
   private final FarmService farmService;
+  private final CropService cropService;
 
   /**
    * Instantiates a new Farm controller.
    *
-   * @param farmService the farm service
+   * @param farmService the farmId service
+   * @param cropService the crop service
    */
   @Autowired
-  public FarmController(FarmService farmService) {
+  public FarmController(FarmService farmService, CropService cropService) {
     this.farmService = farmService;
+    this.cropService = cropService;
   }
 
   /**
-   * Gets farm by id.
+   * Gets farmId by id.
    *
    * @param id the id
-   * @return the farm by id
-   * @throws FarmNotFoundException the farm not found exception
+   * @return the farmId by id
+   * @throws FarmNotFoundException the farmId not found exception
    */
   @GetMapping("/{id}")
   public FarmDto getFarmById(@PathVariable Long id) throws FarmNotFoundException {
@@ -63,10 +72,10 @@ public class FarmController {
   }
 
   /**
-   * Create farm dto.
+   * Create farmId dto.
    *
-   * @param farmCreationDto the farm creation dto
-   * @return the farm dto
+   * @param farmCreationDto the farmId creation dto
+   * @return the farmId dto
    */
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
@@ -74,5 +83,25 @@ public class FarmController {
     return FarmDto.fromEntity(
         farmService.create(farmCreationDto.toEntity())
     );
+  }
+
+  /**
+   * Create crop for farm crop dto.
+   *
+   * @param farmId          the farm id
+   * @param cropCreationDto the crop creation dto
+   * @return the crop dto
+   * @throws FarmNotFoundException the farm not found exception
+   */
+  @PostMapping("/{farmId}/crops")
+  @ResponseStatus(HttpStatus.CREATED)
+  public CropDto createCropForFarm(@PathVariable Long farmId,
+      @RequestBody CropCreationDto cropCreationDto
+  ) throws FarmNotFoundException {
+    Crop crop = cropCreationDto.toEntity();
+
+    Crop savedCrop = cropService.createCropForFarm(farmId, crop);
+
+    return CropDto.fromEntity(savedCrop);
   }
 }

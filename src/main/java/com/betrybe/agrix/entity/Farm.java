@@ -5,7 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.List;
 
 /**
  * The type Farm.
@@ -20,6 +22,9 @@ public class Farm {
 
   private String name;
   private Double size;
+
+  @OneToMany(mappedBy = "farmId")
+  private List<Crop> crops;
 
   /**
    * Instantiates a new Farm.
@@ -90,5 +95,23 @@ public class Farm {
    */
   public void setSize(Double size) {
     this.size = size;
+  }
+
+  /**
+   * Gets crops.
+   *
+   * @return the crops
+   */
+  public List<Crop> getCrops() {
+    return crops;
+  }
+
+  /**
+   * Sets crops.
+   *
+   * @param farms the farms
+   */
+  public void setCrops(List<Crop> farms) {
+    this.crops = farms;
   }
 }
